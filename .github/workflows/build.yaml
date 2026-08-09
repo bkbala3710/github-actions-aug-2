@@ -137,5 +137,5 @@ jobs:
       # --------------------------------------------------
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/static-web-files:${{ steps.version.outputs.version }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/static-web-files:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/static-web-files-2:${{ steps.version.outputs.version }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/static-web-files-2:latest
