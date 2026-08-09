@@ -3,7 +3,7 @@ name: Static Web Files CI
 on:
   push:
     branches:
-      - mainn
+      - main
     paths-ignore:
       - '.gitignore'
       - 'docs/**'
