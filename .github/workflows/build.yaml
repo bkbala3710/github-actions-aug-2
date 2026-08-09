@@ -128,8 +128,8 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build \
-            -t ${{ secrets.DOCKER_USERNAME }}/static-web-files:${{ steps.version.outputs.version }} \
-            -t ${{ secrets.DOCKER_USERNAME }}/static-web-files:latest \
+            -t ${{ secrets.DOCKER_USERNAME }}/static-web-files-2:${{ steps.version.outputs.version }} \
+            -t ${{ secrets.DOCKER_USERNAME }}/static-web-files-2:latest \
             .
 
       # --------------------------------------------------
