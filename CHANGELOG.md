@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [11.0.0](https://github.com/bkbala3710/github-actions-aug-2/compare/v10.1.0...v11.0.0) (2026-08-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* Merge pull request #4 from bkbala3710/release-aug-v2
+
+### Features
+
+* Merge pull request [#4](https://github.com/bkbala3710/github-actions-aug-2/issues/4) from bkbala3710/release-aug-v2 ([8f0f583](https://github.com/bkbala3710/github-actions-aug-2/commit/8f0f583b70c065e9716cd83b110e8934be695f3e))
+
 ## [10.1.0](https://github.com/bkbala3710/github-actions-aug-2/compare/v10.0.1...v10.1.0) (2026-08-09)
 
 
