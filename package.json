@@ -1,0 +1,11 @@
+{
+  "name": "static-web-files",
+  "version": "1.1.0",
+  "private": true,
+  "scripts": {
+    "bump": "standard-version --no-verify"
+  },
+  "devDependencies": {
+    "standard-version": "7.0.0"
+  }
+}
