@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [11.0.1](https://github.com/bkbala3710/github-actions-aug-2/compare/v11.0.0...v11.0.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* typo in branch name from 'mainn' to 'main' ([2c11cb8](https://github.com/bkbala3710/github-actions-aug-2/commit/2c11cb8299be175ad4f6cfa9427728e38ea102f6))
+
 ## [11.0.0](https://github.com/bkbala3710/github-actions-aug-2/compare/v10.1.0...v11.0.0) (2026-08-09)
 
 
