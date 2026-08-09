@@ -3,7 +3,7 @@ name: Static Web Files CI
 on:
   push:
     branches:
-      - main
+      - mainn
     paths-ignore:
       - '.gitignore'
       - 'docs/**'
@@ -11,6 +11,10 @@ on:
 
 permissions:
   contents: write
+
+concurrency:
+  group: static-web-files-bump
+  cancel-in-progress: false
 
 jobs:
   build-and-push:
