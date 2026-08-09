@@ -1,6 +1,6 @@
 {
   "name": "static-web-files",
-  "version": "10.0.1",
+  "version": "10.1.0",
   "private": true,
   "scripts": {
     "bump": "standard-version --no-verify"
