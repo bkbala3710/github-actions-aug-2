@@ -1,0 +1,141 @@
+name: Static Web Files CI
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '.gitignore'
+      - 'docs/**'
+      - 'README.md'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-push:
+
+    if: |
+      github.actor != 'builder' &&
+      github.actor != 'teamcity' &&
+      github.actor != 'systpbuilder' &&
+      github.actor != 'svc-tpcloud_comcast'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # --------------------------------------------------
+      # 1. TeamCity VCS checkout
+      # --------------------------------------------------
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # --------------------------------------------------
+      # 2. TeamCity SSH Agent
+      # --------------------------------------------------
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      # --------------------------------------------------
+      # 3. TeamCity Install Node.js 13.3.0
+      # --------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "13.3.0"
+
+      # --------------------------------------------------
+      # 4. Configure Git
+      #
+      # IMPORTANT:
+      # standard-version creates the Git commit and tag
+      # during "make bump", so Git identity must be
+      # configured BEFORE make bump.
+      # --------------------------------------------------
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      # --------------------------------------------------
+      # 5. TeamCity: make bump
+      #
+      # Makefile:
+      #
+      # semver-install:
+      #     npm --no-package-lock install
+      #
+      # bump: semver-install
+      #     npm run bump
+      #
+      # package.json:
+      #
+      # "bump": "standard-version --no-verify"
+      #
+      # standard-version will:
+      # - update package.json
+      # - update CHANGELOG.md
+      # - create release commit
+      # - create Git tag
+      # --------------------------------------------------
+      - name: Bump Version
+        run: |
+          make bump
+
+      # --------------------------------------------------
+      # 6. TeamCity:
+      #    git push --follow-tags origin master
+      #
+      # Practice repository uses main.
+      # --------------------------------------------------
+      - name: Push Version Changes
+        run: |
+          git push --follow-tags origin main
+
+      # ==================================================
+      # Docker steps added for your migration exercise
+      # ==================================================
+
+      # --------------------------------------------------
+      # 7. Login to Docker Hub
+      # --------------------------------------------------
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # --------------------------------------------------
+      # 8. Get application version
+      # --------------------------------------------------
+      - name: Get Application Version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Application version: $VERSION"
+
+      # --------------------------------------------------
+      # 9. Build Docker image
+      # --------------------------------------------------
+      - name: Build Docker Image
+        run: |
+          docker build \
+            -t ${{ secrets.DOCKER_USERNAME }}/static-web-files:${{ steps.version.outputs.version }} \
+            -t ${{ secrets.DOCKER_USERNAME }}/static-web-files:latest \
+            .
+
+      # --------------------------------------------------
+      # 10. Push Docker image
+      # --------------------------------------------------
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/static-web-files:${{ steps.version.outputs.version }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/static-web-files:latest
